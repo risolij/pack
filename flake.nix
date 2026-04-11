@@ -1,5 +1,5 @@
 {
-  description = "Peel";
+  description = "Mark";
   nixConfig.bash-prompt = "\[nix-develop\]$ ";
 
   inputs = {

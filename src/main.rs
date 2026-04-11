@@ -1,6 +1,7 @@
 use anyhow::Result;
 use crate::actions::*;
 use clap::{ Parser };
+use std::sync::{ Arc };
 
 mod actions;
 
@@ -14,11 +15,11 @@ fn main() {
 
 fn run() -> Result<()> {
     let cli = cmd::Cli::parse();
-    let pocket = pocket::Pocket::reach();
+    let pocket = Arc::new(pocket::Pocket::reach());
 
     match &cli.commands {
-        cmd::Commands::Owns(owns) => owns.run(),
-        cmd::Commands::Keeps(keeps) => keeps.run(pocket),
+        cmd::Commands::Owns(owns) => owns.run(pocket.clone()),
+        cmd::Commands::Keeps(keeps) => keeps.run(pocket.clone()),
         cmd::Commands::Wants { wants } => wants.run(),
     };
 

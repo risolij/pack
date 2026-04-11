@@ -3,3 +3,4 @@ pub mod keeps;
 pub mod wants;
 pub mod cmd;
 pub mod pocket;
+pub mod edc;

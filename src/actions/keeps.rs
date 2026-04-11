@@ -1,5 +1,7 @@
 use clap::{ Args, ArgGroup};
 use super::pocket::Pocket;
+use super::edc::Edc;
+use std::sync::Arc;
 
 #[derive(Args)]
 #[command(group(
@@ -10,6 +12,9 @@ use super::pocket::Pocket;
 ))]
 pub struct Keeps {
     #[arg(short, long)]
+    name: String,
+
+    #[arg(short, long)]
     file: Option<String>,
 
     #[arg(short, long)]
@@ -17,13 +22,14 @@ pub struct Keeps {
 }
 
 impl Keeps {
-    pub fn run(&self, mut pocket: Pocket) {
+    pub fn run(&self, pocket: Arc<Pocket>) {
         if self.file.is_some() {
-            pocket.keeps(self.file.as_ref().unwrap().clone())
-        }
-
-        if self.text.is_some() {
-            pocket.keeps(self.text.as_ref().unwrap().clone())
+            let edc = Edc::new(self.name.to_owned(), self.file.to_owned().unwrap());
+            pocket.keeps_file(edc);
+        } else {
+            let text = self.text.to_owned().unwrap();
+            let edc = Edc::new(self.name.to_owned(), text);
+            pocket.keeps_text(edc);
         }
     }
 }
