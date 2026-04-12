@@ -6,11 +6,7 @@ use std::{
 };
 use std::io::Write;
 use std::path::{Path, PathBuf};
-use crate::actions::{
-    reach::*,
-    gear::*
-};
-use crate::contracts::pocketable::Pocketable;
+use super::gear::*;
 
 #[derive(Debug, Clone)]
 pub struct Pocket {
@@ -47,25 +43,27 @@ impl Pocket {
         println!("{}", String::from_utf8(reader).unwrap());
     }
 
-    pub fn reach(&self, gear: Reach) {
-        match gear {
-            Reach::Snippet { name } => {
-                self.search(&name);
-            },
-            Reach::Scaffold { kind } => {
-                todo!()
-            },
-        }
+    pub fn reach(&self, name: &str) {
+        self.search(name);
     }
 
     pub fn stash(&self, gear: Gear) {
-        let contents = gear.into_bytes();
-        let name = gear.name();
-        let path = self.path.join(name);
+        match gear.gear_type {
+            GearType::File(file) => {
+                let contents = read(file).unwrap();
+                let name = gear.name;
+                let mut file = File::create_new(self.path.join(name)).unwrap();
+                file.write_all(&contents).unwrap();
 
-        let mut file = File::create_new(path)
-            .expect("Failed to create file");
+            },
+            GearType::Text(text) => {
+                let contents = text.as_bytes();
+                let name = gear.name;
 
-        file.write_all(&contents);
+                let mut file = File::create_new(self.path.join(name)).unwrap();
+
+                file.write_all(&contents).unwrap();
+            }
+        }
     }
 }

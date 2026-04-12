@@ -1,6 +1,6 @@
 use clap::Args;
 use std::path::PathBuf;
-use super::gear::*;
+use crate::models::gear::*;
 
 #[derive(Args, Clone)]
 pub struct Stash {
@@ -21,16 +21,12 @@ pub struct StashInput {
     text: Option<String>
 }
 
-impl Stash {
-    pub fn into_gear(self) -> Gear {
-        if self.input.file.is_some() {
-            return Gear::File(
-                GearFile::new(self.name, self.input.file.unwrap())
-            );
+impl From<Stash> for Gear {
+    fn from(stash: Stash) -> Gear {
+        if stash.input.file.is_some() {
+            Gear::new(stash.name, GearType::File(stash.input.file.unwrap()))
         } else {
-            return Gear::Text(
-                GearText::new(self.name, self.input.text.unwrap())
-            );
+            Gear::new(stash.name, GearType::Text(stash.input.text.unwrap()))
         }
     }
 }

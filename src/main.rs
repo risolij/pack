@@ -1,13 +1,10 @@
 use anyhow::Result;
 use clap::{ Parser };
-use crate::actions::{
-    cmd::Commands,
-    cmd::Cli,
-    pocket::Pocket
-};
+use crate::actions::cmd::{ Cli, Commands };
+use crate::models::pocket::Pocket;
 
-mod contracts;
 mod actions;
+mod models;
 
 fn main() {
     if run().is_err() {
@@ -21,8 +18,8 @@ fn run() -> Result<()> {
 
     match cli.commands {
         Commands::Dump => pocket.dump(),
-        Commands::Stash( gear ) => pocket.stash(gear.into_gear()),
-        Commands::Reach( gear ) => pocket.reach(gear),
+        Commands::Stash( stash) => pocket.stash(stash.into()),
+        Commands::Reach( reach ) => pocket.reach(&reach.name),
     };
 
     Ok(())

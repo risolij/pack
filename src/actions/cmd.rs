@@ -13,7 +13,6 @@ pub struct Cli {
 #[derive(Subcommand)]
 pub enum Commands {
     Dump,
-    #[command(subcommand)]
     Reach(Reach),
     Stash(Stash)
 }
