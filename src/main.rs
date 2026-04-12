@@ -1,26 +1,28 @@
 use anyhow::Result;
-use crate::actions::*;
 use clap::{ Parser };
-use std::sync::{ Arc };
+use crate::actions::{
+    cmd::Commands,
+    cmd::Cli,
+    pocket::Pocket
+};
 
+mod contracts;
 mod actions;
 
 fn main() {
-    if let Err(_) = run() {
+    if run().is_err() {
         std::process::exit(1);
-    } else {
-        std::process::exit(0);
     }
 }
 
 fn run() -> Result<()> {
-    let cli = cmd::Cli::parse();
-    let pocket = Arc::new(pocket::Pocket::reach());
+    let cli = Cli::parse();
+    let pocket = Pocket::pack();
 
-    match &cli.commands {
-        cmd::Commands::Owns(owns) => owns.run(pocket.clone()),
-        cmd::Commands::Keeps(keeps) => keeps.run(pocket.clone()),
-        cmd::Commands::Wants { wants } => wants.run(),
+    match cli.commands {
+        Commands::Dump => pocket.dump(),
+        Commands::Stash( gear ) => pocket.stash(gear.into_gear()),
+        Commands::Reach( gear ) => pocket.reach(gear),
     };
 
     Ok(())

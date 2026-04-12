@@ -1,12 +1,12 @@
-# mark
+# pocket
 
-**mark** is a lightweight command-line tool for managing project scaffolds and reusable snippets.
+**pocket** is a lightweight command-line tool for managing project scaffolds and reusable snippets.
 
 It helps you quickly **see what you have**, **save what you like**, and **use what you need** — all from your terminal.
 
 ## ✨ Overview
 
-`mark` combines two common workflows:
+`pocket` combines two common workflows:
 
 * 🏗️ **Project scaffolding** — bootstrap new projects instantly
 * 📌 **Snippet management** — store and reuse useful code or text
@@ -14,33 +14,32 @@ It helps you quickly **see what you have**, **save what you like**, and **use wh
 ## 🚀 Installation
 
 ```bash
-cargo install mark
+cargo install pocket
 ```
 
 *or clone and build manually:*
 
 ```bash
 git clone <repo-url>
-cd mark
+cd pocket
 cargo build --release
 ```
-
 ---
 
 ## 🧠 Core Concepts
 
-* **Owns** → What you have
-* **Keeps** → What you save
-* **Wants** → What you use
+* **dump** → What you have
+* **stash** → What you save
+* **reach** → What you use
 
 ## 📚 Commands
 
-### `mark owns`
+### `pocket owns`
 
 List everything available to you.
 
 ```bash
-mark owns
+pocket owns
 ```
 
 Displays:
@@ -50,12 +49,12 @@ Displays:
 
 ---
 
-### `mark keeps`
+### `pocket keeps`
 
 Save something new.
 
 ```bash
-mark keeps TBD
+pocket keeps TBD
 ```
 
 Use this command to:
@@ -65,12 +64,12 @@ Use this command to:
 
 ---
 
-### `mark wants`
+### `pocket wants`
 
 Use what you've saved.
 
 ```bash
-mark wants my-snippet
+pocket wants my-snippet
 ```
 
 Use this command to:
@@ -84,14 +83,7 @@ Use this command to:
 TBD
 
 ## 📁 Suggested Structure
-
-`mark` may store data in a directory like:
-
-```
-~/.mark/
-  scaffolds/
-  snippets/
-```
+TDB
 
 ## 🔮 Future Ideas
 
@@ -102,4 +94,3 @@ TBD
 
 ## 🤝 Contributing
 Contributions, ideas, and feedback are welcome!
-

@@ -1,6 +1,5 @@
-pub mod owns;
-pub mod keeps;
-pub mod wants;
+pub mod stash;
+pub mod reach;
 pub mod cmd;
 pub mod pocket;
-pub mod edc;
+pub mod gear;

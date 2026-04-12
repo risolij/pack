@@ -1,7 +1,16 @@
-use std::fs::{self, File};
+use std::{
+    fs::create_dir_all,
+    fs::read_dir,
+    fs::File,
+    fs::read
+};
 use std::io::Write;
 use std::path::{Path, PathBuf};
-use super::edc::Edc;
+use crate::actions::{
+    reach::*,
+    gear::*
+};
+use crate::contracts::pocketable::Pocketable;
 
 #[derive(Debug, Clone)]
 pub struct Pocket {
@@ -9,19 +18,20 @@ pub struct Pocket {
 }
 
 impl Pocket {
-    pub fn reach() -> Self {
-        let pocket_local = format!("{}/.local/share/mark", std::env!("HOME"));
+    pub fn pack() -> Self {
+        let base_env = std::env::var("HOME").expect("HOME not set");
+        let pocket_local = format!("{}/.local/share/pocket", base_env);
         let pocket_path = Path::new(&pocket_local);
 
         if !pocket_path.exists() {
-            fs::create_dir_all(pocket_path).unwrap();
+            create_dir_all(pocket_path).unwrap();
         } 
 
         Self { path: pocket_path.to_path_buf() }
     }
 
-    pub fn owns(&self) {
-        let Ok(dirs) = fs::read_dir(&self.path) else {
+    pub fn dump(&self) {
+        let Ok(dirs) = read_dir(&self.path) else {
             return;
         };
 
@@ -32,27 +42,30 @@ impl Pocket {
             .for_each(|path| println!("{}", path.display()));
     }
 
-    fn keeps(&self, edc: &Edc) -> Result<File, std::io::Error> {
-        File::create_new(self.path.join(edc.to_path()))
+    pub fn search(&self, name: &str) {
+        let reader = read(self.path.join(name)).unwrap();
+        println!("{}", String::from_utf8(reader).unwrap());
     }
 
-    pub fn keeps_file(&self, edc: Edc) {
-        let Ok(mut store) = self.keeps(&edc) else {
-            return;
-        };
-
-        let file = edc.to_contents();
-        let contents = String::from_utf8(std::fs::read(file).unwrap()).unwrap();
-
-        store.write_all(contents.as_bytes()).unwrap();
-
+    pub fn reach(&self, gear: Reach) {
+        match gear {
+            Reach::Snippet { name } => {
+                self.search(&name);
+            },
+            Reach::Scaffold { kind } => {
+                todo!()
+            },
+        }
     }
 
-    pub fn keeps_text(&self, edc: Edc) {
-        let Ok(mut file) = self.keeps(&edc) else {
-            return;
-        };
+    pub fn stash(&self, gear: Gear) {
+        let contents = gear.into_bytes();
+        let name = gear.name();
+        let path = self.path.join(name);
 
-        file.write_all(edc.to_contents().as_bytes()).unwrap();
+        let mut file = File::create_new(path)
+            .expect("Failed to create file");
+
+        file.write_all(&contents);
     }
 }

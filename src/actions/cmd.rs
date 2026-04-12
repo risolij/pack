@@ -1,8 +1,7 @@
 use clap::{ Subcommand, Parser };
 use super::{
-    owns::Owns,
-    wants::Wants,
-    keeps::Keeps
+    reach::Reach,
+    stash::Stash
 };
 
 #[derive(Parser)]
@@ -13,13 +12,8 @@ pub struct Cli {
 
 #[derive(Subcommand)]
 pub enum Commands {
-    #[command(about = "List of marks items")]
-    Owns(Owns),
-    Wants {
-        #[arg(value_enum)]
-        wants: Wants, 
-    },
-    Keeps(Keeps)
+    Dump,
+    #[command(subcommand)]
+    Reach(Reach),
+    Stash(Stash)
 }
-
-
