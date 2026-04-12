@@ -1,6 +1,6 @@
 use std::fs::{File, create_dir_all, read, read_dir};
 use std::io::Write;
-use std::path::{ Path, PathBuf };
+use std::path::PathBuf;
 use crate::actions::stash::Stash;
 use crate::contracts::{
     reacher::Reacher,
@@ -39,12 +39,8 @@ pub struct GearReacher {
 
 impl GearReacher {
     pub fn pack(path: PathBuf) -> Self {
-        let base_env = std::env::var("HOME").expect("HOME not set");
-        let pocket_local = format!("{}/.local/share/pocket", base_env);
-        let pocket_path = Path::new(&pocket_local);
-
-        if !pocket_path.exists() {
-            create_dir_all(pocket_path).unwrap();
+        if !path.exists() {
+            create_dir_all(&path).unwrap();
         } 
 
         Self { path }
