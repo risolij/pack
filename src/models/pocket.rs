@@ -31,7 +31,7 @@ where
     }
 
     pub fn stash(&self, gear: Gear) {
-            self.stasher.stash(gear);
+        self.stasher.stash(gear);
     }
 
     pub fn dump(&self) {

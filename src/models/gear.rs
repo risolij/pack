@@ -1,6 +1,7 @@
 use std::fs::{File, create_dir_all, read, read_dir};
 use std::io::Write;
 use std::path::{ Path, PathBuf };
+use crate::actions::stash::Stash;
 use crate::contracts::{
     reacher::Reacher,
     stasher::Stasher
@@ -8,21 +9,28 @@ use crate::contracts::{
 
 pub struct Gear {
     pub name: String,
-    pub gear_type: GearType
+    pub data: Vec<u8>
 }
 
 impl Gear {
-    pub fn new(name: String, gear_type: GearType) -> Self {
+    pub fn new(name: String, data: Vec<u8>) -> Self {
         Self {
             name,
-            gear_type
+            data
         }
     }
 }
 
-pub enum GearType {
-    File(PathBuf),
-    Text(String)
+impl From<Stash> for Gear {
+    fn from(stash: Stash) -> Self {
+        let data = if let Some(path) = stash.input.file {
+            read(path).unwrap()
+        } else {
+            stash.input.text.unwrap().into_bytes()
+        };
+
+        Gear::new(stash.name, data)
+    }
 }
 
 pub struct GearReacher {
@@ -61,41 +69,21 @@ impl Reacher for GearReacher {
         println!("{}", text);
     }
 
-    fn reach_local(&self, name: PathBuf) -> Vec<u8> {
-        read(name).unwrap()
-    }
-
     fn dump(&self) {
         let Ok(dirs) = read_dir(&self.path) else {
             return;
         };
 
         dirs
-            .into_iter()
-            .filter_map(|path| path.ok())
-            .map(|path| path.file_name())
-            .for_each(|path| println!("{}", path.display()));
+            .flatten()
+            .map(|path| path.file_name().to_string_lossy().to_string())
+            .for_each(|path| println!("{}", path));
     }
 }
 
 impl Stasher for GearStasher {
     fn stash(&self, gear: Gear) {
-        match gear.gear_type {
-            GearType::File(file) => {
-                let contents = read(file).unwrap();
-                let name = gear.name;
-                let mut file = File::create_new(self.path.join(name)).unwrap();
-                file.write_all(&contents).unwrap();
-
-            },
-            GearType::Text(text) => {
-                let contents = text.as_bytes();
-                let name = gear.name;
-
-                let mut file = File::create_new(self.path.join(name)).unwrap();
-
-                file.write_all(&contents).unwrap();
-            }
-        }
+        let mut file = File::create_new(self.path.join(gear.name)).unwrap();
+        file.write_all(&gear.data).unwrap();
     }
 }
