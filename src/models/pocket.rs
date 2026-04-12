@@ -38,13 +38,11 @@ impl Pocket {
             .for_each(|path| println!("{}", path.display()));
     }
 
-    pub fn search(&self, name: &str) {
-        let reader = read(self.path.join(name)).unwrap();
-        println!("{}", String::from_utf8(reader).unwrap());
-    }
-
     pub fn reach(&self, name: &str) {
-        self.search(name);
+        let bytes = read(self.path.join(name)).unwrap();
+        let text = String::from_utf8(bytes).unwrap();
+
+        println!("{}", text);
     }
 
     pub fn stash(&self, gear: Gear) {

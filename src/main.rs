@@ -18,8 +18,8 @@ fn run() -> Result<()> {
 
     match cli.commands {
         Commands::Dump => pocket.dump(),
-        Commands::Stash( stash) => pocket.stash(stash.into()),
-        Commands::Reach( reach ) => pocket.reach(&reach.name),
+        Commands::Stash(stash) => pocket.stash(stash.into()),
+        Commands::Reach(reach) => pocket.reach(&reach.name),
     };
 
     Ok(())
