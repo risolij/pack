@@ -1,0 +1,48 @@
+use std::fs::{read, read_dir};
+use std::path::PathBuf;
+
+use crate::error::PackError;
+use crate::gear::{Gear, Fishable};
+
+pub trait Fisher {
+    type Gear: Fishable;
+
+    fn fish(&self, path: &PathBuf, name: &str) -> Option<Self::Gear>;
+    fn dump(&self, path: &PathBuf) -> Result<Vec<Self::Gear>, PackError>;
+}
+
+pub struct GearFisher;
+
+impl GearFisher {
+    pub fn new() -> Self {
+        Self { }
+    }
+}
+impl Fisher for GearFisher {
+    type Gear = Gear;
+
+    fn fish(&self, path: &PathBuf, name: &str) -> Option<Self::Gear> {
+        let data= read(path.join(name)).ok()?;
+
+        Some(Gear::new(name.to_string(), data))
+    }
+
+    fn dump(&self, path: &PathBuf) -> Result<Vec<Self::Gear>, PackError> {
+        let result: Result<Vec<_>, PackError> = read_dir(path)?
+            .map(|entry| {
+                let path = entry?.path();
+                let file_name = path
+                    .file_name()
+                    .ok_or(PackError::GearInvalidPath)?
+                    .to_string_lossy()
+                    .to_string();
+
+                let contents = read(&path)?;
+
+                Ok(Gear::new(file_name.to_string(), contents))
+            })
+            .collect();
+
+        result
+    }
+}

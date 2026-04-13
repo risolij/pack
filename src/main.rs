@@ -1,36 +1,46 @@
-use std::path::PathBuf;
-use std::str::FromStr;
+mod cli;
+mod error;
+mod gear;
+mod util;
+mod storage;
 
-use anyhow::Result;
-use clap::{ Parser };
-use crate::actions::cmd::{ Cli, Commands };
-use crate::models::pocket::Pocket;
-use crate::models::gear::{ GearReacher, GearStasher };
+use cli::*;
+use error::PackError;
+use storage::*;
+use util::loadout;
+use crate::storage::pack::Pack;
 
-mod actions;
-mod models;
-mod contracts;
+use clap::Parser;
 
-fn main() {
-    if run().is_err() {
-        std::process::exit(1);
-    }
-}
+fn main() -> Result<(), PackError> {
+    let path = loadout()?;
+    let pack = GearPack::new(
+        path,
+        GearFisher::new(),
+        GearStasher::new()
+    );
 
-fn run() -> Result<()> {
     let cli = Cli::parse();
-    let home = std::env::var("HOME").unwrap();
-    let local = format!("{}/.local/share/pocket", home);
 
-    let reacher = GearReacher::pack(PathBuf::from_str(&local)?);
-    let stasher = GearStasher::pack(PathBuf::from_str(&local)?);
-    let pocket = Pocket::pack(reacher, stasher);
-
-    match cli.commands {
-        Commands::Dump => pocket.dump(),
-        Commands::Stash(stash) => pocket.stash(stash.into()),
-        Commands::Reach(reach) => pocket.reach(&reach.name),
-    };
-
+    match cli.actions {
+        Actions::Dump => {
+            pack.dump()?
+                .iter()
+                .for_each(|gear| println!("{}", gear.name()));
+        },
+        Actions::Fish { name } => {
+            if let Some(gear) = pack.fish(&name) {
+                println!("{}", gear);
+            }
+        }
+        Actions::Stash(proto) => {
+            if let Ok(gear) = proto.try_into() {
+                if let Some(ok_gear) = pack.stash(gear)? {
+                    println!("{}", ok_gear);
+                }
+            }
+        }
+    }
+    
     Ok(())
 }
