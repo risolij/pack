@@ -1,12 +1,12 @@
-# pocket
+# pack
 
-**pocket** is a lightweight command-line tool for managing project scaffolds and reusable snippets.
+**pack** is a lightweight command-line tool for managing project scaffolds and reusable snippets.
 
 It helps you quickly **see what you have**, **save what you like**, and **use what you need** — all from your terminal.
 
 ## ✨ Overview
 
-`pocket` combines two common workflows:
+`pack` combines two common workflows:
 
 * 🏗️ **Project scaffolding** — bootstrap new projects instantly
 * 📌 **Snippet management** — store and reuse useful code or text
@@ -14,14 +14,14 @@ It helps you quickly **see what you have**, **save what you like**, and **use wh
 ## 🚀 Installation
 
 ```bash
-cargo install pocket
+cargo install pack
 ```
 
 *or clone and build manually:*
 
 ```bash
 git clone <repo-url>
-cd pocket
+cd pack
 cargo build --release
 ```
 ---
@@ -34,12 +34,12 @@ cargo build --release
 
 ## 📚 Commands
 
-### `pocket owns`
+### `pack owns`
 
 List everything available to you.
 
 ```bash
-pocket owns
+pack owns
 ```
 
 Displays:
@@ -49,12 +49,12 @@ Displays:
 
 ---
 
-### `pocket keeps`
+### `pack keeps`
 
 Save something new.
 
 ```bash
-pocket keeps TBD
+pack keeps TBD
 ```
 
 Use this command to:
@@ -64,12 +64,12 @@ Use this command to:
 
 ---
 
-### `pocket wants`
+### `pack wants`
 
 Use what you've saved.
 
 ```bash
-pocket wants my-snippet
+pack wants my-snippet
 ```
 
 Use this command to:
