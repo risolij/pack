@@ -28,12 +28,19 @@ impl Fisher for GearFisher {
     }
 
     fn dump(&self, path: &PathBuf) -> Result<Vec<Self::Gear>, PackError> {
+        if !path.exists() {
+            return Err(PackError::PackNotFound);
+        }
+
         let result: Result<Vec<_>, PackError> = read_dir(path)?
             .map(|entry| {
-                let path = entry?.path();
+                let path = entry
+                    .map_err(|_| PackError::GearNotFound)?
+                    .path();
+
                 let file_name = path
                     .file_name()
-                    .ok_or(PackError::GearInvalidPath)?
+                    .ok_or(PackError::GearNotFound)?
                     .to_string_lossy()
                     .to_string();
 

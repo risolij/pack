@@ -12,7 +12,14 @@ use crate::storage::pack::Pack;
 
 use clap::Parser;
 
-fn main() -> Result<(), PackError> {
+fn main() {
+    if let Err(e) = run() {
+        eprintln!("Error: {}", e);
+        std::process::exit(1);
+    }
+}
+
+fn run() -> Result<(), PackError> {
     let path = loadout()?;
     let pack = GearPack::new(
         path,
