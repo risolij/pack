@@ -12,6 +12,9 @@ pub enum PackError {
     #[error("Gear not found in pack")]
     GearNotFound,
 
+    #[error("Proto Gear not convertible to Gear")]
+    ProtoGearConversion,
+
     #[error("Unexpected error occurred: {0}")]
     Io(#[source] io::Error),
 

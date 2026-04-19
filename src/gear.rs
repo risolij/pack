@@ -44,10 +44,7 @@ impl TryFrom<ProtoGear> for Gear {
             (None, Some(stdin)) => {
                 Ok(Gear::from_stdin(value.name, stdin))
             }
-            _ => {
-                eprintln!("Something went wrong");
-                std::process::exit(1);
-            }
+            _ => Err(PackError::ProtoGearConversion)
         }
     }
 }

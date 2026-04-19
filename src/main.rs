@@ -38,6 +38,8 @@ fn run() -> Result<(), PackError> {
         Actions::Fish { name } => {
             if let Some(gear) = pack.fish(&name) {
                 println!("{}", gear);
+            } else {
+                println!("No gear found matching '{}'", &name);
             }
         }
         Actions::Stash(proto) => {
