@@ -15,6 +15,9 @@ pub enum PackError {
     #[error("Proto Gear not convertible to Gear")]
     ProtoGearConversion,
 
+    #[error("Pack System unknown")]
+    PackSystemUnkown,
+
     #[error("Unexpected error occurred: {0}")]
     Io(#[source] io::Error),
 
