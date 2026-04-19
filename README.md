@@ -1,4 +1,4 @@
-# pack
+## pack
 
 **pack** is a lightweight command-line tool for managing project scaffolds and reusable snippets.
 
@@ -28,62 +28,39 @@ cargo build --release
 
 ## 🧠 Core Concepts
 
-* **dump** → What you have
-* **stash** → What you save
-* **reach** → What you use
+* **dump** → dump all gear
+* **stash** → stash gear
+* **fish** → fish for gear
+* **ditch** → ditch gear
 
 ## 📚 Commands
 
-### `pack owns`
-
+### pack dump
+```bash
+pack dump
+```
 List everything available to you.
 
-```bash
-pack owns
-```
-
-Displays:
-
-* Available project scaffolds
-* Saved snippets
-
----
-
-### `pack keeps`
-
-Save something new.
+### pack stash
 
 ```bash
-pack keeps TBD
+pack stash -f src/main.rs -n "gear 1"
 ```
-
-Use this command to:
-
-* Save a snippet
-* Store a reusable project scaffold
-
----
-
-### `pack wants`
-
-Use what you've saved.
 
 ```bash
-pack wants my-snippet
+pack stash -s "one two three" -n "gear 1"
 ```
 
-Use this command to:
+### pack ditch
+```bash
+pack ditch -n "gear 1"
+```
 
-* Apply a scaffold to a new project
-* Output or insert a snippet
+### pack fish
+```bash
+pack fish -n "gear 1"
+```
 
----
-
-## 🔧 Examples
-TBD
-
-## 📁 Suggested Structure
-TDB
 
 ## 🔮 Future Ideas
 
