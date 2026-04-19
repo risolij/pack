@@ -60,6 +60,8 @@ impl std::fmt::Display for Gear {
 
 pub trait Fishable {}
 pub trait Stashable {}
+pub trait Ditchable {}
 
+impl Ditchable for Gear {}
 impl Fishable for Gear {}
 impl Stashable for Gear {}

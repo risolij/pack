@@ -11,7 +11,8 @@ pub struct Cli {
 pub enum Actions {
     Dump,
     Fish { name: String },
-    Stash(ProtoGear)
+    Stash(ProtoGear),
+    Ditch { name: String }
 }
 
 #[derive(Args)]

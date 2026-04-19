@@ -24,7 +24,8 @@ fn run() -> Result<(), PackError> {
     let pack = GearPack::new(
         path,
         GearFisher::new(),
-        GearStasher::new()
+        GearStasher::new(),
+        GearDitcher::new()
     );
 
     let cli = Cli::parse();
@@ -47,6 +48,12 @@ fn run() -> Result<(), PackError> {
                 if let Some(ok_gear) = pack.stash(gear)? {
                     println!("{}", ok_gear);
                 }
+            }
+        }
+        Actions::Ditch { name } => {
+            match pack.ditch(&name) {
+                true => println!("Gear '{}' ditched", &name),
+                false => println!("No gear found matching '{}'", &name),
             }
         }
     }
