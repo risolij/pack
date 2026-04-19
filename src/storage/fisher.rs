@@ -3,6 +3,7 @@ use std::path::PathBuf;
 
 use crate::error::PackError;
 use crate::gear::{Gear, Fishable};
+use crate::cli::Extension;
 
 pub trait Fisher {
     type Gear: Fishable;
@@ -22,9 +23,9 @@ impl Fisher for GearFisher {
     type Gear = Gear;
 
     fn fish(&self, path: &PathBuf, name: &str) -> Option<Self::Gear> {
-        let data= read(path.join(name)).ok()?;
-
-        Some(Gear::new(name.to_string(), data))
+        let path = path.join(name);
+        let extension = Extension::Rs;
+        Gear::from_file(name.to_string(), path.to_owned(), extension).ok()
     }
 
     fn dump(&self, path: &PathBuf) -> Result<Vec<Self::Gear>, PackError> {
@@ -46,7 +47,7 @@ impl Fisher for GearFisher {
 
                 let contents = read(&path)?;
 
-                Ok(Gear::new(file_name.to_string(), contents))
+                Ok(Gear::new(file_name.to_string(), contents, Extension::Rs))
             })
             .collect();
 

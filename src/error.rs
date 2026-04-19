@@ -9,6 +9,9 @@ pub enum PackError {
     #[error("Pack not found")]
     PackNotFound,
 
+    #[error("Extesion error")]
+    ExtensionError,
+
     #[error("Gear not found in pack")]
     GearNotFound,
 
