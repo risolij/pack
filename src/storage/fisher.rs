@@ -2,10 +2,13 @@ use std::fs::{read, read_dir};
 use std::path::PathBuf;
 
 use crate::error::PackError;
-use crate::gear::Gear;
+use crate::gear::{Fishable, Gear};
 use crate::cli::Extension;
 
-pub trait Fisher<G> {
+pub trait Fisher<G>
+where
+    G: Fishable
+{
     fn fish(&self, path: &PathBuf, name: &str) -> Option<G>;
     fn dump(&self, path: &PathBuf) -> Result<Vec<G>, PackError>;
 }

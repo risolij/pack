@@ -19,7 +19,7 @@ pub struct GearPack<F, S, D>
 where
     F: Fisher<Gear>,
     S: Stasher<Gear>,
-    D: Ditcher
+    D: Ditcher<Gear>
 {
     pub path: PathBuf,
     pub fisher: F,
@@ -31,7 +31,7 @@ impl<F, S, D> GearPack<F, S, D>
 where
     F: Fisher<Gear>,
     S: Stasher<Gear>,
-    D: Ditcher
+    D: Ditcher<Gear>
 {
     pub fn new(path: PathBuf, fisher: F, stasher: S, ditcher: D) -> Self {
         Self {
@@ -47,7 +47,7 @@ impl<F, S, D> Pack for GearPack<F, S, D>
 where
     F: Fisher<Gear>,
     S: Stasher<Gear>,
-    D: Ditcher
+    D: Ditcher<Gear>
 {
     type Gear = Gear;
 

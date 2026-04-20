@@ -3,9 +3,12 @@ use std::io::Write;
 use std::path::PathBuf;
 
 use crate::error::PackError;
-use crate::gear::Gear;
+use crate::gear::{Stashable, Gear};
 
-pub trait Stasher<G> {
+pub trait Stasher<G>
+where
+    G: Stashable
+{
     fn stash(&self, path: &PathBuf, item: G) -> Result<Option<G>, PackError>;
 }
 
