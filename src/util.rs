@@ -23,7 +23,7 @@ impl PackSystem {
             },
             PackSystem::Mac => {
                 let home = env::var("HOME")?;
-                format!("{}/Library/Application Support", home)
+                format!("{}/Library/Application Support/pack", home)
             },
         };
 
