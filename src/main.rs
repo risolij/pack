@@ -8,7 +8,7 @@ use cli::*;
 use error::PackError;
 use storage::*;
 use util::loadout;
-use crate::gear::Painter;
+use crate::gear::Highlightable;
 use crate::storage::pack::Pack;
 use syntect::parsing::SyntaxSet;
 use syntect::highlighting::ThemeSet;
@@ -44,7 +44,7 @@ fn run() -> Result<(), PackError> {
         },
         Actions::Fish { name } => {
             if let Some(gear) = pack.fish(&name) {
-                gear.paint(&ss, &ts);
+                gear.highlight(&ss, &ts);
             } else {
                 println!("No gear found matching '{}'", &name);
             }
@@ -52,7 +52,7 @@ fn run() -> Result<(), PackError> {
         Actions::Stash(proto) => {
             if let Ok(gear) = proto.try_into() {
                 if let Some(ok_gear) = pack.stash(gear)? {
-                    ok_gear.paint(&ss, &ts);
+                    ok_gear.highlight(&ss, &ts);
                 }
             }
         }

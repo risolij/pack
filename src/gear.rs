@@ -67,12 +67,12 @@ impl Fishable for Gear {}
 impl Stashable for Gear {}
 impl Ditchable for Gear {}
 
-pub trait Painter {
-    fn paint(&self, ss: &SyntaxSet, ts: &ThemeSet);
+pub trait Highlightable {
+    fn highlight(&self, ss: &SyntaxSet, ts: &ThemeSet);
 }
 
-impl Painter for Gear {
-    fn paint(&self, ss: &SyntaxSet, ts: &ThemeSet) {
+impl Highlightable for Gear {
+    fn highlight(&self, ss: &SyntaxSet, ts: &ThemeSet) {
         let syntax = ss
             .find_syntax_by_extension(self.extension.as_str())
             .unwrap_or(ss.find_syntax_plain_text());
