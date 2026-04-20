@@ -1,6 +1,6 @@
 {
-  description = "Mark";
-  nixConfig.bash-prompt = "\[nix-develop\]$ ";
+  description = "Pack";
+  nixConfig.bash-prompt = "\[pack-shell\]$ ";
 
   inputs = {
     nixpkgs.url      = "github:nixos/nixpkgs/nixos-unstable";
@@ -23,7 +23,7 @@
       {
         devShell = mkShell {
           buildInputs = [
-	    cargo-dist
+            cargo-dist
             rust-analyzer
             (rust-bin.selectLatestNightlyWith (toolchain: toolchain.default.override {
               extensions = ["rust-src"];

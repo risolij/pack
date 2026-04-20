@@ -1,9 +1,11 @@
-use std::{fs, path::PathBuf};
+use std::fs;
+use std::path::PathBuf;
 use crate::gear::{Gear, Ditchable};
 
-pub trait Ditcher {
-    type Gear: Ditchable;
-
+pub trait Ditcher<G>
+where
+    G: Ditchable
+{
     fn ditch(&self, path: &PathBuf, name: &str) -> bool;
 }
 
@@ -15,9 +17,7 @@ impl GearDitcher {
     }
 }
 
-impl Ditcher for GearDitcher {
-    type Gear = Gear;
-
+impl Ditcher<Gear> for GearDitcher {
     fn ditch(&self, path: &PathBuf, name: &str) -> bool {
         let removal = fs::remove_file(path.join(name));
 

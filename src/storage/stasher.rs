@@ -3,12 +3,13 @@ use std::io::Write;
 use std::path::PathBuf;
 
 use crate::error::PackError;
-use crate::gear::{Gear, Stashable};
+use crate::gear::{Stashable, Gear};
 
-pub trait Stasher {
-    type Gear: Stashable;
-
-    fn stash(&self, path: &PathBuf, item: Self::Gear) -> Result<Option<Self::Gear>, PackError>;
+pub trait Stasher<G>
+where
+    G: Stashable
+{
+    fn stash(&self, path: &PathBuf, item: G) -> Result<Option<G>, PackError>;
 }
 
 pub struct GearStasher;
@@ -19,10 +20,8 @@ impl GearStasher {
     }
 }
 
-impl Stasher for GearStasher {
-    type Gear = Gear;
-
-    fn stash(&self, path: &PathBuf, item: Self::Gear) -> Result<Option<Self::Gear>, PackError> {
+impl Stasher<Gear> for GearStasher {
+    fn stash(&self, path: &PathBuf, item: Gear) -> Result<Option<Gear>, PackError> {
         let path = path.join(&item.name);
         let mut file = File::create_new(path)?;
 
