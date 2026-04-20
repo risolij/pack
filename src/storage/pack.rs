@@ -1,13 +1,13 @@
 use std::path::PathBuf;
 
 use crate::error::PackError;
-use crate::gear::{Gear, Fishable, Stashable, Ditchable};
+use crate::gear::Gear;
 use super::stasher::Stasher;
 use super::fisher::Fisher;
 use super::ditcher::Ditcher;
 
 pub trait Pack {
-    type Gear: Fishable + Stashable + Ditchable;
+    type Gear;
 
     fn fish(&self, name: &str) -> Option<Self::Gear>;
     fn dump(&self) -> Result<Vec<Self::Gear>, PackError>;
@@ -17,8 +17,8 @@ pub trait Pack {
 
 pub struct GearPack<F, S, D>
 where
-    F: Fisher,
-    S: Stasher,
+    F: Fisher<Gear>,
+    S: Stasher<Gear>,
     D: Ditcher
 {
     pub path: PathBuf,
@@ -29,8 +29,8 @@ where
 
 impl<F, S, D> GearPack<F, S, D>
 where
-    F: Fisher,
-    S: Stasher,
+    F: Fisher<Gear>,
+    S: Stasher<Gear>,
     D: Ditcher
 {
     pub fn new(path: PathBuf, fisher: F, stasher: S, ditcher: D) -> Self {
@@ -45,9 +45,9 @@ where
 
 impl<F, S, D> Pack for GearPack<F, S, D>
 where
-    F: Fisher<Gear = Gear>,
-    S: Stasher<Gear = Gear>,
-    D: Ditcher<Gear = Gear>
+    F: Fisher<Gear>,
+    S: Stasher<Gear>,
+    D: Ditcher
 {
     type Gear = Gear;
 

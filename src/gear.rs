@@ -60,16 +60,9 @@ impl TryFrom<ProtoGear> for Gear {
     }
 }
 
-pub trait Fishable {}
-pub trait Stashable {}
-pub trait Ditchable {}
 pub trait Painter {
     fn paint(&self, ss: &SyntaxSet, ts: &ThemeSet);
 }
-
-impl Ditchable for Gear {}
-impl Fishable for Gear {}
-impl Stashable for Gear {}
 
 impl Painter for Gear {
     fn paint(&self, ss: &SyntaxSet, ts: &ThemeSet) {

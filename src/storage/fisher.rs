@@ -2,14 +2,12 @@ use std::fs::{read, read_dir};
 use std::path::PathBuf;
 
 use crate::error::PackError;
-use crate::gear::{Gear, Fishable};
+use crate::gear::Gear;
 use crate::cli::Extension;
 
-pub trait Fisher {
-    type Gear: Fishable;
-
-    fn fish(&self, path: &PathBuf, name: &str) -> Option<Self::Gear>;
-    fn dump(&self, path: &PathBuf) -> Result<Vec<Self::Gear>, PackError>;
+pub trait Fisher<G> {
+    fn fish(&self, path: &PathBuf, name: &str) -> Option<G>;
+    fn dump(&self, path: &PathBuf) -> Result<Vec<G>, PackError>;
 }
 
 pub struct GearFisher;
@@ -19,16 +17,14 @@ impl GearFisher {
         Self { }
     }
 }
-impl Fisher for GearFisher {
-    type Gear = Gear;
-
-    fn fish(&self, path: &PathBuf, name: &str) -> Option<Self::Gear> {
+impl Fisher<Gear> for GearFisher {
+    fn fish(&self, path: &PathBuf, name: &str) -> Option<Gear> {
         let path = path.join(name);
         let extension = Extension::Rs;
         Gear::from_file(name.to_string(), path.to_owned(), extension).ok()
     }
 
-    fn dump(&self, path: &PathBuf) -> Result<Vec<Self::Gear>, PackError> {
+    fn dump(&self, path: &PathBuf) -> Result<Vec<Gear>, PackError> {
         if !path.exists() {
             return Err(PackError::PackNotFound);
         }
