@@ -12,6 +12,9 @@ pub enum PackError {
     #[error("Extesion error")]
     ExtensionError,
 
+    #[error("Gear translation from ut8 failed")]
+    GearUtf8Error,
+
     #[error("Gear not found in pack")]
     GearNotFound,
 
